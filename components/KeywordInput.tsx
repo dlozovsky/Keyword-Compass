@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchIcon from './icons/SearchIcon';
 import type { SearchOptions, KeywordType } from '../types';
 
 interface KeywordInputProps {
-  onSearch: (seedKeyword: string, options: SearchOptions) => void;
+  onSearch: (seedKeyword: string, options: SearchOptions, fromHistory?: boolean) => void;
   isLoading: boolean;
+  initialQuery?: { seedKeyword: string; options: SearchOptions } | null;
 }
 
-const KeywordInput: React.FC<KeywordInputProps> = ({ onSearch, isLoading }) => {
+const KeywordInput: React.FC<KeywordInputProps> = ({ onSearch, isLoading, initialQuery }) => {
   const [seedKeyword, setSeedKeyword] = useState('');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [options, setOptions] = useState<SearchOptions>({
@@ -16,6 +17,16 @@ const KeywordInput: React.FC<KeywordInputProps> = ({ onSearch, isLoading }) => {
     negatives: '',
   });
 
+  useEffect(() => {
+    if (initialQuery) {
+      setSeedKeyword(initialQuery.seedKeyword);
+      setOptions(initialQuery.options);
+      if (initialQuery.seedKeyword.trim() && !isLoading) {
+        onSearch(initialQuery.seedKeyword.trim(), initialQuery.options, true);
+      }
+    }
+  }, [initialQuery]);
+
   const handleOptionChange = <K extends keyof SearchOptions>(key: K, value: SearchOptions[K]) => {
     setOptions(prev => ({...prev, [key]: value}));
   };
@@ -23,7 +34,7 @@ const KeywordInput: React.FC<KeywordInputProps> = ({ onSearch, isLoading }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (seedKeyword.trim() && !isLoading) {
-      onSearch(seedKeyword.trim(), options);
+      onSearch(seedKeyword.trim(), options, false);
     }
   };
 

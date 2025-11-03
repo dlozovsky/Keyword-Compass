@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import type { KeywordData, SearchOptions, KeywordCluster } from './types';
+import type { KeywordData, SearchOptions, KeywordCluster, SearchHistoryItem } from './types';
 import { streamLowCompetitionKeywords, clusterKeywords } from './services/geminiService';
 import KeywordInput from './components/KeywordInput';
 import ResultsTable from './components/ResultsTable';
 import ResultsClusters from './components/ResultsClusters';
 import LoadingSpinner from './components/LoadingSpinner';
 import CompassIcon from './components/icons/CompassIcon';
+import HistoryPanel from './components/HistoryPanel';
 
 const App: React.FC = () => {
   const [keywords, setKeywords] = useState<KeywordData[]>([]);
@@ -14,8 +15,40 @@ const App: React.FC = () => {
   const [isClustering, setIsClustering] = useState<boolean>(false);
   const [isStreamFinished, setIsStreamFinished] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [history, setHistory] = useState<SearchHistoryItem[]>([]);
+  const [activeSearchQuery, setActiveSearchQuery] = useState<{ seedKeyword: string; options: SearchOptions } | null>(null);
 
-  const handleSearch = useCallback(async (seedKeyword: string, options: SearchOptions) => {
+  useEffect(() => {
+    try {
+      const storedHistory = localStorage.getItem('keywordCompassHistory');
+      if (storedHistory) {
+        setHistory(JSON.parse(storedHistory));
+      }
+    } catch (e) {
+      console.error("Failed to parse history from localStorage", e);
+      localStorage.removeItem('keywordCompassHistory');
+    }
+  }, []);
+
+  const handleSearch = useCallback(async (seedKeyword: string, options: SearchOptions, fromHistory: boolean = false) => {
+    if (!fromHistory) {
+      const newHistoryItem: SearchHistoryItem = {
+        id: `${seedKeyword}-${new Date().getTime()}`,
+        seedKeyword,
+        options,
+        timestamp: Date.now(),
+      };
+      
+      setHistory(prev => {
+        if (prev[0]?.seedKeyword === newHistoryItem.seedKeyword && JSON.stringify(prev[0]?.options) === JSON.stringify(newHistoryItem.options)) {
+          return prev;
+        }
+        const updatedHistory = [newHistoryItem, ...prev].slice(0, 20);
+        localStorage.setItem('keywordCompassHistory', JSON.stringify(updatedHistory));
+        return updatedHistory;
+      });
+    }
+
     setIsLoading(true);
     setIsClustering(false);
     setIsStreamFinished(false);
@@ -37,9 +70,18 @@ const App: React.FC = () => {
     }
   }, [isLoading]);
 
+  const handleRerunSearch = useCallback((item: SearchHistoryItem) => {
+    setActiveSearchQuery({ seedKeyword: item.seedKeyword, options: item.options });
+  }, []);
+
+  const handleClearHistory = useCallback(() => {
+    setHistory([]);
+    localStorage.removeItem('keywordCompassHistory');
+  }, []);
+
   useEffect(() => {
     const performClustering = async () => {
-      if (keywords.length < 5) return; // Don't cluster small lists
+      if (keywords.length < 5) return;
 
       setIsClustering(true);
       try {
@@ -47,8 +89,6 @@ const App: React.FC = () => {
         setClusters(clusterResults);
       } catch (err) {
         console.error("Clustering failed:", err);
-        // Silently fail, the user still has the flat list.
-        // Or show a small notification. For now, silent is fine.
       } finally {
         setIsClustering(false);
       }
@@ -110,12 +150,18 @@ const App: React.FC = () => {
       </header>
       
       <div className="w-full flex justify-center mb-8 px-4">
-        <KeywordInput onSearch={handleSearch} isLoading={isLoading || isClustering} />
+        <KeywordInput onSearch={handleSearch} isLoading={isLoading || isClustering} initialQuery={activeSearchQuery} />
       </div>
 
       <div className="w-full flex justify-center px-4">
         {renderContent()}
       </div>
+
+      <HistoryPanel
+        history={history}
+        onRerunSearch={handleRerunSearch}
+        onClearHistory={handleClearHistory}
+      />
     </main>
   );
 };

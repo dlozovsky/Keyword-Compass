@@ -2,8 +2,7 @@
 
 An intelligent keyword research tool that leverages AI to discover low-competition keywords, helping you optimize your SEO strategy and rank higher in search results. This application provides real-time, actionable insights powered by Google's Gemini API.
 
-<img width="1378" height="792" alt="image" src="https://github.com/user-attachments/assets/fc19cf96-429d-440e-9924-08ffe389d942" />
-
+![Keyword Compass Screenshot](https://storage.googleapis.com/aistudio-ux-team-public/sdk_gallery/keyword-compass.png)
 
 ## ✨ About The Project
 
@@ -11,17 +10,31 @@ Keyword Compass is a modern web application designed to streamline the keyword r
 
 The standout feature is its ability to automatically group generated keywords into semantically related clusters, helping you understand user intent and structure your content strategy more effectively.
 
-### Key Features
+## 🌟 Features in Detail
 
--   **🤖 AI-Powered Generation:** Leverages Google Gemini to find creative and relevant long-tail keywords.
--   **⚡ Real-Time Streaming:** Results appear on your screen as they are generated, providing an interactive experience.
--   **📊 In-Depth Analysis:** Each keyword comes with estimated search volume, a competition score (Low, Medium, High), and an AI-generated justification.
--   **🔍 Advanced Filtering:** Refine your search by keyword count, type (Questions, Commercial, Informational), and negative keywords.
--   **🧠 Semantic Clustering:** Automatically groups keywords into topical clusters to help you organize your content strategy.
--   **🎨 Modern UI:** A sleek, responsive, and dark-themed interface built with React and Tailwind CSS.
--   **↔️ Interactive Tables:** Easily sort results by keyword, search volume, or competition, and filter by competition level.
--   **📥 CSV Export:** Download your keyword lists or clustered results with a single click.
--   **🔗 Direct SERP Links:** Instantly check the Google Search Engine Results Page for any keyword.
+### Core Capabilities
+
+-   **🤖 AI-Powered Keyword Generation:** Enter a single "seed" keyword, and let the Gemini AI generate a list of relevant long-tail keywords that your audience is actively searching for.
+-   **⚡ Real-Time Streaming:** Results appear on your screen as they are generated, providing an interactive and fast experience. No more waiting for a full report to load.
+-   **📊 In-Depth Keyword Analysis:** Each keyword comes with:
+    -   **Estimated Search Volume:** Understand the potential traffic for a keyword.
+    -   **Competition Score:** A simple "Low," "Medium," or "High" rating to help you prioritize.
+    -   **AI Justification:** A clear explanation of *why* the competition is rated a certain way.
+-   **🔍 Advanced Search Options:** Fine-tune your search with advanced controls to specify the number of keywords, filter by type (Questions, Commercial, Informational), and exclude negative keywords.
+-   **↔️ Interactive & Sortable Results:** Easily sort the results table by keyword, search volume, or competition level. Filter the entire list to show only low, medium, or high competition keywords.
+-   **📥 CSV Export:** Download your keyword lists (either the full list or the clustered view) with a single click for offline analysis or use in other SEO tools.
+-   **🔗 Direct SERP Links:** Instantly check the Google Search Engine Results Page for any keyword to analyze the current top-ranking content.
+
+### What Makes It Unique
+
+-   **🧠 Semantic Clustering:** This is the killer feature. After generating a list of keywords, Keyword Compass uses the Gemini API again to analyze and group them into semantically related clusters. This helps you understand the different sub-topics and user intents related to your seed keyword, making it incredibly easy to plan your content pillars and topic clusters.
+
+    *Example: A search for "digital marketing" might result in clusters like "Social Media Strategies," "Content Marketing for Beginners," and "Local SEO Services."*
+
+    ![Keyword Clustering View](https://storage.googleapis.com/aistudio-ux-team-public/sdk_gallery/keyword-compass.png)
+    *(The screenshot above shows the clustered results view, with each accordion item representing a distinct topic cluster.)*
+
+-   **Zero-Build, Modern Stack:** The application runs directly in the browser using native ES Modules and Import Maps. There's no complex build process, making it lightweight and easy to modify or deploy.
 
 ## 🛠️ Tech Stack
 
@@ -93,3 +106,12 @@ This project is designed to run directly in a modern browser without a build ste
     -   Click the external link icon to check the live SERP for a keyword.
 6.  **Review Clusters:** Once the streaming is complete, the app will process the results and group them into semantic clusters. These will be displayed in an accordion view.
 7.  **Export Data:** Click the "Export CSV" button to download your findings for use in other tools or reports.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## ✍️ Author
+
+**Daniel Lozovsky** - Developer & Open Source Contributor
+-   [LinkedIn](https://www.linkedin.com/in/daniellozovsky/)

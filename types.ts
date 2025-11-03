@@ -26,3 +26,10 @@ export interface KeywordCluster {
   clusterName: string;
   keywords: KeywordData[];
 }
+
+export interface SearchHistoryItem {
+  id: string;
+  seedKeyword: string;
+  options: SearchOptions;
+  timestamp: number;
+}
