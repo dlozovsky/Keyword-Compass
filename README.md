@@ -2,7 +2,8 @@
 
 An intelligent keyword research tool that leverages AI to discover low-competition keywords, helping you optimize your SEO strategy and rank higher in search results. This application provides real-time, actionable insights powered by Google's Gemini API.
 
-![Keyword Compass Screenshot](https://storage.googleapis.com/aistudio-ux-team-public/sdk_gallery/keyword-compass.png)
+<img width="1378" height="792" alt="image" src="https://github.com/user-attachments/assets/fc19cf96-429d-440e-9924-08ffe389d942" />
+
 
 ## ✨ About The Project
 
